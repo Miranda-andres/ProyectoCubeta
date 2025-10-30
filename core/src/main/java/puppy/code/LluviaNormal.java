@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 /**
- * Implementación concreta de la lluvia básica del juego.
+ * Nivel 1: Gotas normales (azules) y dañinas (rojas).
  */
 public class LluviaNormal extends LluviaBase {
 
@@ -14,6 +14,7 @@ public class LluviaNormal extends LluviaBase {
 
     public LluviaNormal(Texture azul, Texture roja, Texture verde, Texture amarilla,
                         Sound drop, Music musica) {
+        super(1, 300); // nivel 1, meta = 300 puntos
         lluviaInterna = new Lluvia(azul, roja, verde, amarilla, drop, musica);
         lluviaInterna.crear();
     }
@@ -26,20 +27,5 @@ public class LluviaNormal extends LluviaBase {
     @Override
     public void dibujar(SpriteBatch batch) {
         lluviaInterna.actualizarDibujoLluvia(batch);
-    }
-
-    @Override
-    public int getNivel() {
-        return lluviaInterna.getNivelNumero();
-    }
-
-    @Override
-    public int getObjetivo() {
-        return lluviaInterna.getObjetivoAzules();
-    }
-
-    @Override
-    public int getProgreso() {
-        return lluviaInterna.getAzulesRecogidas();
     }
 }
