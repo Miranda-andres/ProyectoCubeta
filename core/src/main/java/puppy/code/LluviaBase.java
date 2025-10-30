@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * Clase abstracta base para distintos tipos de lluvia (niveles).
  * Define las operaciones comunes: actualizar y dibujar.
  */
-public abstract class Lluvia {
+public abstract class LluviaBase {
 	protected int nivel;
 	protected int objetivoPuntaje;
 
@@ -19,9 +19,10 @@ public abstract class Lluvia {
 
     public abstract void dibujar(SpriteBatch batch);
 
-    public abstract int getNivel();
+    public abstract int getNivel(){
+		return nivel;
+	}
 
-    public abstract int getObjetivo();
+    public abstract int getObjetivoPuntaje();
 
-    public abstract int getProgreso();
 }
