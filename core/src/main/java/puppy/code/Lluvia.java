@@ -262,11 +262,19 @@ public class Lluvia {
 
         public Nivel(int numero) {
             this.numero = numero;
-            this.objetivoAzules = switch (numero) {
-                case 1 -> 30;
-                case 2 -> 45;
-                default -> 55;
-            };
+            int objetivo;
+            switch (numero) {
+                case 1:
+                    objetivo = 30;
+                    break;
+                case 2:
+                    objetivo = 45;
+                    break;
+                default:
+                    objetivo = 55;
+                    break;
+            }
+            this.objetivoAzules = objetivo;
         }
 
         public boolean completo() {
