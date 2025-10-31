@@ -1,0 +1,17 @@
+[33md18e409[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'main' of https://github.com/Miranda-andres/ProyectoCubeta
+[33m6302b93[m cambio total
+[33m4257b35[m correcion de errores menores producidos por el mal majeo de las abstracciones como tambien la incongruencia del llamado de estas
+[33m25152eb[m ajuste de nombre de clase
+[33md5b9b7f[m tarro implement movible y maneja movimiento, velocidad tempopral, invulnerabilidad y vidas
+[33m789a98c[m abstraccion
+[33m458883c[m extraccion de clase Nivelo (antes en lluvia)
+[33md219825[m Clase hija que encapsula la lógica actual de Lluvia.java
+[33ma79ae9f[m abstraccion de clase padre y creaccion de interfaz
+[33m4d3c726[m agrego fotos de las gotas amarillas y verdes
+[33m3b85003[m Creación de clases Hijas e interfaz
+[33m492d432[m Arreglo lluvia
+[33m19c8d96[m limpieza
+[33m5f1f4d6[m Añadimos niveles y las gotas
+[33m451d270[m clase lluvia, gotas añadidas
+[33m36d82b0[m Clase Tarro
+[33m4424712[m Add files via upload
