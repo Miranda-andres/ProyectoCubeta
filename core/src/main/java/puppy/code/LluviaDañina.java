@@ -28,4 +28,9 @@ public class LluviaDañina extends LluviaBase {
     public void dibujar(SpriteBatch batch) {
         lluviaInterna.actualizarDibujoLluvia(batch);
     }
+
+    @Override
+    public int getProgreso() {
+        return lluviaInterna.getPuntaje();
+    }
 }

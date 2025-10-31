@@ -10,7 +10,7 @@ public abstract class LluviaBase {
 	protected int nivel;
 	protected int objetivoPuntaje;
 
-	public Lluvia(int nivel, int objetivoPuntaje) {
+	public LluviaBase(int nivel, int objetivoPuntaje) {
 		this.nivel = nivel;
 		this.objetivoPuntaje = objetivoPuntaje;
 	}
@@ -19,10 +19,14 @@ public abstract class LluviaBase {
 
     public abstract void dibujar(SpriteBatch batch);
 
-    public abstract int getNivel(){
-		return nivel;
-	}
+    public int getNivel() {
+        return nivel;
+    }
 
-    public abstract int getObjetivoPuntaje();
+    public int getObjetivoPuntaje() {
+        return objetivoPuntaje;
+    }
+
+    public abstract int getProgreso();
 
 }

@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
  */
 public class GameScreen implements Screen {
 
-    private final Drop game;
+    private final GameLluviaMenu game;
     private SpriteBatch batch;
 
     private Texture fondo;
@@ -28,7 +28,7 @@ public class GameScreen implements Screen {
     private LluviaBase lluvia;
     private int nivelActual = 1;
 
-    public GameScreen(final Drop game) {
+    public GameScreen(final GameLluviaMenu game) {
         this.game = game;
         batch = new SpriteBatch();
 
@@ -81,10 +81,17 @@ public class GameScreen implements Screen {
         if (progreso >= objetivo) {
             nivelActual++;
 
-            switch (nivelActual) {
-                case 2 -> lluvia = new LluviaCurativa(azul, roja, verde, amarilla, dropSound, rainMusic);
-                case 3 -> lluvia = new LluviaDiagonal(azul, roja, verde, amarilla, dropSound, rainMusic);
-                default -> lluvia = new LluviaNormal(azul, roja, verde, amarilla, dropSound, rainMusic);
+            switch (nivelActual) 
+            {
+            case 2:
+            lluvia = new LluviaCurativa(azul, roja, verde, amarilla, dropSound, rainMusic);
+            break;
+            case 3:
+            lluvia = new LluviaDiagonal(azul, roja, verde, amarilla, dropSound, rainMusic);
+            break;
+            default:
+            lluvia = new LluviaNormal(azul, roja, verde, amarilla, dropSound, rainMusic);
+                break;
             }
 
             cambiarEscenario(nivelActual);
@@ -97,11 +104,19 @@ public class GameScreen implements Screen {
      */
     private void cambiarEscenario(int nivel) {
         switch (nivel) {
-            case 1 -> fondo = fondo1;
-            case 2 -> fondo = fondo2;
-            case 3 -> fondo = fondo3;
-            default -> fondo = fondo1;
-        }
+    case 1:
+        fondo = fondo1;
+        break;
+    case 2:
+        fondo = fondo2;
+        break;
+    case 3:
+        fondo = fondo3;
+        break;
+    default:
+        fondo = fondo1;
+        break;
+}
     }
 
     @Override
