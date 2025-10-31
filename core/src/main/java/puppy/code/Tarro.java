@@ -2,116 +2,117 @@ package puppy.code;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.TimeUtils;
 
-public class Tarro {
-   private Rectangle bucket;
-   private Texture bucketImage;
-   private Texture bucketHurt;
-   private Sound sonidoHerido;
+/**
+ * Clase que representa al tarro (jugador).
+ * Implementa la interfaz Movible para aplicar principios de diseño OO.
+ */
+public class Tarro implements Movible {
 
-   // Vida y puntos
-   private int vidas = 3;
-   private int vidaMax = 3;      // puede subir hasta 5 con verdes
-   private static final int VIDA_TOPE = 5;
-   private int puntos = 0;
+    private Texture imagen;
+    private Rectangle rect;
+    private float velocidadBase = 200f;
+    private float velMultiplicador = 1f;
 
-   // Movimiento
-   private float velBase = 400f;
-   private float velMultiplicador = 1f;
-   private float boostRestante = 0f;
+    private int vidas = 3;
+    private final int MAX_VIDAS = 5;
 
-   // Daño/inmunidad y pestañeo
-   private boolean invulnerable = false;
-   private float invulnRestante = 0f;
+    private boolean invulnerable = false;
+    private float tiempoInvulnerable = 2f;
+    private float tiempoRestanteInvulnerable = 0f;
 
-   public Tarro(Texture tex, Texture hurt, Sound ss) {
-       bucketImage = tex;
-       bucketHurt = hurt;
-       sonidoHerido = ss;
-   }
+    private float tiempoBoost = 8f;
+    private float boostRestante = 0f;
 
-   public void crear() {
-      bucket = new Rectangle();
-      bucket.x = 800 / 2f - 64 / 2f;
-      bucket.y = 20;
-      bucket.width = 64;
-      bucket.height = 64;
-   }
+    public Tarro() {
+        imagen = new Texture("tarro.png");
+        rect = new Rectangle(400 - 32, 20, 64, 64);
+    }
 
-   public void updateTimers(float delta) {
-       if (invulnerable) {
-           invulnRestante -= delta;
-           if (invulnRestante <= 0f) {
-               invulnerable = false;
-               invulnRestante = 0f;
-           }
-       }
-       if (boostRestante > 0f) {
-           boostRestante -= delta;
-           if (boostRestante <= 0f) {
-               boostRestante = 0f;
-               velMultiplicador = 1f;
-           }
-       }
-   }
+    @Override
+    public void mover(float delta) {
+        float velocidadActual = velocidadBase * velMultiplicador;
 
-   public void recibirDano(int d) {
-      if (invulnerable) return;
-      vidas = Math.max(0, vidas - d);
-      invulnerable = true;
-      invulnRestante = 1.5f; // 1.5 segundos
-      if (sonidoHerido != null) sonidoHerido.play();
-   }
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            rect.x -= velocidadActual * delta;
+        }
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            rect.x += velocidadActual * delta;
+        }
 
-   public void curar(int c) {
-      if (vidaMax < VIDA_TOPE) vidaMax = Math.min(VIDA_TOPE, vidaMax + 1);
-      vidas = Math.min(vidaMax, vidas + c);
-   }
+        // Limitar dentro de la pantalla
+        if (rect.x < 0) rect.x = 0;
+        if (rect.x > 800 - rect.width) rect.x = 800 - rect.width;
 
-   public void aplicarBoostVelocidad(float porcentaje, float duracionSeg) {
-      velMultiplicador = 1f + porcentaje; // 1.25
-      boostRestante = duracionSeg;        // 8s
-   }
+        // Contadores de efectos
+        if (invulnerable) {
+            tiempoRestanteInvulnerable -= delta;
+            if (tiempoRestanteInvulnerable <= 0) invulnerable = false;
+        }
 
-   public void dibujar(SpriteBatch batch) {
-     boolean flicker = invulnerable && ((int)(TimeUtils.millis() / 120) % 2 == 0);
-     Texture tex = (flicker && bucketHurt != null) ? bucketHurt : bucketImage;
+        if (boostRestante > 0) {
+            boostRestante -= delta;
+            if (boostRestante <= 0) velMultiplicador = 1f;
+        }
+    }
 
-     if (!flicker)  {
-       batch.draw(tex, bucket.x, bucket.y);
-     } else {
-       // pequeño jitter para indicar daño (pestañeo)
-       batch.draw(tex, bucket.x, bucket.y + MathUtils.random(-5,5));
-     }
-   }
+    @Override
+    public void dibujar(SpriteBatch batch) {
+        batch.draw(imagen, rect.x, rect.y);
+    }
 
-   public void actualizarMovimiento() {
-       float vel = getVelocidadActual();
-       if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) bucket.x -= vel * Gdx.graphics.getDeltaTime();
-       if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) bucket.x += vel * Gdx.graphics.getDeltaTime();
-       if(bucket.x < 0) bucket.x = 0;
-       if(bucket.x > 800 - 64) bucket.x = 800 - 64;
-   }
+    // =====================
+    // Métodos de efectos
+    // =====================
 
-   public void sumarPuntos(int pp) { puntos += pp; }
+    /** Añade una vida, sin pasar el máximo permitido. */
+    public void curar() {
+        if (vidas < MAX_VIDAS) vidas++;
+    }
 
-   public Rectangle getArea() { return bucket; }
+    /** Resta una vida, salvo si está invulnerable. */
+    public void dañar() {
+        if (!invulnerable) {
+            vidas--;
+            invulnerable = true;
+            tiempoRestanteInvulnerable = tiempoInvulnerable;
+        }
+    }
 
-   public void destruir() {
-     if (bucketImage != null) bucketImage.dispose();
-     if (bucketHurt != null) bucketHurt.dispose();
-   }
+    /** Activa un boost temporal de velocidad. */
+    public void activarBoost() {
+        velMultiplicador = 1.8f;
+        boostRestante = tiempoBoost;
+    }
 
-   // Encapsulamiento
-   public int getVidas() { return vidas; }
-   public int getVidaMax() { return vidaMax; }
-   public int getPuntos() { return puntos; }
-   public boolean estaMuerto() { return vidas <= 0; }
-   public float getVelocidadActual() { return velBase * velMultiplicador; }
+    /** Reinicia los efectos temporales entre niveles. */
+    public void reiniciarEfectos() {
+        velMultiplicador = 1f;
+        boostRestante = 0f;
+        invulnerable = false;
+        tiempoRestanteInvulnerable = 0f;
+    }
+
+    // =====================
+    // Getters y Setters
+    // =====================
+
+    public Rectangle getRect() {
+        return rect;
+    }
+
+    public int getVidas() {
+        return vidas;
+    }
+
+    public boolean estaVivo() {
+        return vidas > 0;
+    }
+
+    public void dispose() {
+        imagen.dispose();
+    }
 }
